@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <LangVersion>7.3</LangVersion>
+    <RazorLangVersion>3.0</RazorLangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="$(ClientPackagesVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="$(ClientPackagesVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="$(ClientPackagesVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.DevServer" Version="$(ClientPackagesVersion)" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sample.Core\Sample.Core.csproj" />
+  </ItemGroup>
+
+  <!-- Workaround for https://github.com/aspnet/AspNetCore/issues/13103 -->
+  <!-- This is only needed for standalone Blazor WebAssembly apps. It's not needed when hosted on ASP.NET Core. -->
+  <Target Name="CopyBlazorInputFileAssets" BeforeTargets="Build">
+    <ItemGroup>
+      <_BlazorInputFile_FilesToCopy Include="..\..\BlazorInputFile\wwwroot\**" />
+      <_SampleCore_FilesToCopy Include="..\Sample.Core\wwwroot\**" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_BlazorInputFile_FilesToCopy)" DestinationFolder="wwwroot\_content\BlazorInputFile" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(_SampleCore_FilesToCopy)" DestinationFolder="wwwroot\_content\Sample.Core" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

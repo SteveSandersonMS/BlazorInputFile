@@ -1,0 +1,50 @@
+﻿@page "/dragdrop-viewer"
+
+<h1>Drag/drop file viewer</h1>
+
+<p>Shows how you can present a custom UI instead of the native file input.</p>
+
+<div class="drag-drop-zone">
+    <InputFile OnChange="ViewFile" />
+    @status
+</div>
+
+@if (fileName != null)
+{
+    <h3>@fileName</h3>
+    <pre>@fileTextContents</pre>
+}
+
+@code {
+    const string DefaultStatus = "Drop a text file here to view it, or click to choose a file";
+    const int MaxFileSize = 5 * 1024 * 1024; // 5MB
+    string status = DefaultStatus;
+
+    string fileName;
+    string fileTextContents;
+
+    async Task ViewFile(IFileListEntry[] files)
+    {
+        var file = files.FirstOrDefault();
+        if (file == null)
+        {
+            return;
+        }
+        else if (file.Size > MaxFileSize)
+        {
+            status = $"That's too big. Max size: {MaxFileSize} bytes.";
+        }
+        else
+        {
+            status = "Loading...";
+
+            using (var reader = new StreamReader(file.Data))
+            {
+                fileTextContents = await reader.ReadToEndAsync();
+                fileName = file.Name;
+            }
+
+            status = DefaultStatus;
+        }
+    }
+}

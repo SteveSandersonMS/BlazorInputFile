@@ -1,0 +1,13 @@
+﻿@page "/native"
+
+<h1>Native upload</h1>
+
+<p>
+    This sample does not use <code>InputFile</code>. Instead, it's a plain HTML
+    <code>&lt;input type="file"&gt;</code>, so you can compare the user experience.
+</p>
+
+<form action="native-upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="normalfile" />
+    <p><button type="submit">Submit form</button></p>
+</form>

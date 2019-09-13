@@ -1,0 +1,6 @@
+<Project>
+    <PropertyGroup>
+        <ServerPackagesVersion>3.0.0-preview9.19424.4</ServerPackagesVersion>
+        <ClientPackagesVersion>3.0.0-preview9.19424.4</ClientPackagesVersion>
+    </PropertyGroup>
+</Project>
