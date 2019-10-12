@@ -9,7 +9,7 @@
                 var fileList = Array.prototype.map.call(elem.files, function (file) {
                     var result = {
                         id: ++nextFileId,
-                        lastModified: new Date(file.lastModified).toISOString(),
+                        lastModified: (file.lastModified ? new Date(file.lastModified) : file.lastModifiedDate).toISOString(),
                         name: file.name,
                         size: file.size,
                         type: file.type
