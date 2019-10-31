@@ -13,6 +13,8 @@ namespace BlazorInputFile
 
         string Type { get; }
 
+        string Url { get; }
+
         Stream Data { get; }
 
         event EventHandler OnDataRead;
