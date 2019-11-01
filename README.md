@@ -8,7 +8,7 @@ For installation and usage information, see [this blog post](http://blog.stevens
 
 ```csharp
 <MatButton OnClick="@(() => OnButtonClick("myInput"))" Label="Choose File"></MatButton>
-<InputFile HideElement="true" OnChange="HandleFileSelected" ElementId="myInput"> </InputFile>
+<InputFile IsElementHidden="true" OnChange="HandleFileSelected" ElementId="myInput"> </InputFile>
 
 @if (file != null)
 {
