@@ -63,6 +63,10 @@
             destinationUint8Array.set(sourceUint8Array, destinationOffset);
 
             return bytesToRead;
+        },
+
+        wrapInput: function wrapInput(elementId) {
+            document.getElementById(elementId).click();
         }
     };
 
