@@ -22,7 +22,12 @@
                     return result;
                 });
 
-                componentInstance.invokeMethodAsync('NotifyChange', fileList).then(null, function (err) {
+                componentInstance.invokeMethodAsync('NotifyChange', fileList).then(function () {
+                    //reset file value ,otherwise, the same filename will not be trigger change event again
+                    elem.value = '';
+                }, function (err) {
+                    //reset file value ,otherwise, the same filename will not be trigger change event again
+                    elem.value = '';
                     throw new Error(err);
                 });
             });
