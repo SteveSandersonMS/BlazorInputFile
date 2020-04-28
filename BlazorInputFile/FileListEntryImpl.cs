@@ -23,6 +23,8 @@ namespace BlazorInputFile
 
         public string Type { get; set; }
 
+        public string RelativePath { get; set; }
+
         public Stream Data
         {
             get

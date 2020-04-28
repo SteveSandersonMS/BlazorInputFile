@@ -12,7 +12,8 @@
                         lastModified: new Date(file.lastModified).toISOString(),
                         name: file.name,
                         size: file.size,
-                        type: file.type
+                        type: file.type,
+                        relativePath: file.webkitRelativePath
                     };
                     elem._blazorFilesById[result.id] = result;
 
