@@ -36,37 +36,40 @@
 
         toImageFile(elem, fileId, format, maxWidth, maxHeight) {
             var originalFile = getFileById(elem, fileId);
-            return createImageBitmap(originalFile.blob)
-                .then(function (imageBitmap) {
-                    return new Promise(function (resolve) {
-                        var desiredWidthRatio = Math.min(1, maxWidth / imageBitmap.width);
-                        var desiredHeightRatio = Math.min(1, maxHeight / imageBitmap.height);
-                        var chosenSizeRatio = Math.min(desiredWidthRatio, desiredHeightRatio);
 
-                        var canvas = document.createElement('canvas');
-                        canvas.width = Math.round(imageBitmap.width * chosenSizeRatio);
-                        canvas.height = Math.round(imageBitmap.height * chosenSizeRatio);
-                        canvas.getContext('2d').drawImage(imageBitmap, 0, 0, canvas.width, canvas.height);
-                        return canvas.toBlob(resolve, format);
-                    });
-                })
-                .then(function (resizedImageBlob) {
-                    var result = {
-                        id: ++elem._blazorInputFileNextFileId,
-                        lastModified: originalFile.lastModified,
-                        name: originalFile.name, // Note: we're not changing the file extension
-                        size: resizedImageBlob.size,
-                        type: format,
-                        relativePath: originalFile.relativePath
-                    };
+            return new Promise(function (resolve) {
+                var originalFileImage = new Image();
+                originalFileImage.onload = function () { resolve(originalFileImage); };
+                originalFileImage.src = URL.createObjectURL(originalFile.blob);
+            }).then(function (loadedImage) {
+                return new Promise(function (resolve) {
+                    var desiredWidthRatio = Math.min(1, maxWidth / loadedImage.width);
+                    var desiredHeightRatio = Math.min(1, maxHeight / loadedImage.height);
+                    var chosenSizeRatio = Math.min(desiredWidthRatio, desiredHeightRatio);
 
-                    elem._blazorFilesById[result.id] = result;
-
-                    // Attach the blob data itself as a non-enumerable property so it doesn't appear in the JSON
-                    Object.defineProperty(result, 'blob', { value: resizedImageBlob });
-
-                    return result;
+                    var canvas = document.createElement('canvas');
+                    canvas.width = Math.round(loadedImage.width * chosenSizeRatio);
+                    canvas.height = Math.round(loadedImage.height * chosenSizeRatio);
+                    canvas.getContext('2d').drawImage(loadedImage, 0, 0, canvas.width, canvas.height);
+                    canvas.toBlob(resolve, format);
                 });
+            }).then(function (resizedImageBlob) {
+                var result = {
+                    id: ++elem._blazorInputFileNextFileId,
+                    lastModified: originalFile.lastModified,
+                    name: originalFile.name, // Note: we're not changing the file extension
+                    size: resizedImageBlob.size,
+                    type: format,
+                    relativePath: originalFile.relativePath
+                };
+
+                elem._blazorFilesById[result.id] = result;
+
+                // Attach the blob data itself as a non-enumerable property so it doesn't appear in the JSON
+                Object.defineProperty(result, 'blob', { value: resizedImageBlob });
+
+                return result;
+            });
         },
 
         readFileData: function readFileData(elem, fileId, startOffset, count) {
