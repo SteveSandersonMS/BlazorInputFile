@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace BlazorInputFile
 {
@@ -32,6 +33,11 @@ namespace BlazorInputFile
                 _stream ??= Owner.OpenFileStream(this);
                 return _stream;
             }
+        }
+
+        public async Task<IFileListEntry> ToImageFileAsync(string format, int maxWidth, int maxHeight)
+        {
+            return await Owner.ConvertToImageFileAsync(this, format, maxWidth, maxHeight);
         }
 
         internal void RaiseOnDataRead()
