@@ -1,13 +1,24 @@
 ﻿@implements IDisposable
 @inject IJSRuntime JSRuntime
 
-<input type="file" @ref="inputFileElement" @attributes="UnmatchedParameters" />
+@if (IsElementHidden)
+{
+    <input id="@ElementId" type="file" @ref="inputFileElement" @attributes="UnmatchedParameters" style="display:none;"/>
+}
+else
+{
+    <input type="file" @ref="inputFileElement" @attributes="UnmatchedParameters" />
+}
 
 @code {
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> UnmatchedParameters { get; set; }
     [Parameter] public EventCallback<IFileListEntry[]> OnChange { get; set; }
     [Parameter] public int MaxMessageSize { get; set; } = 20 * 1024; // TODO: Use SignalR default
     [Parameter] public int MaxBufferSize { get; set; } = 1024 * 1024;
+
+
+    [Parameter] public string ElementId { get; set; } // this id is used by the js function 'wrapInput' which calls click()
+    [Parameter] public bool IsElementHidden { get; set; } = false;
 
     ElementReference inputFileElement;
     IDisposable thisReference;
