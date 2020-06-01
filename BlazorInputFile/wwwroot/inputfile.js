@@ -4,37 +4,40 @@
             elem._blazorInputFileNextFileId = 0;
 
             elem.addEventListener('change', function handleInputFileChange(event) {
-                // Reduce to purely serializable data, plus build an index by ID
-                elem._blazorFilesById = {};
-                var fileList = Array.prototype.map.call(elem.files, function (file) {
-                    var result = {
-                        id: ++elem._blazorInputFileNextFileId,
-                        lastModified: new Date(file.lastModified).toISOString(),
-                        name: file.name,
-                        size: file.size,
-                        type: file.type,
-                        relativePath: file.webkitRelativePath
-                    };
-                    elem._blazorFilesById[result.id] = result;
+                // Only process if files selected.
+                if (elem.files.length > 0) {
+                    // Reduce to purely serializable data, plus build an index by ID
+                    elem._blazorFilesById = {};
+                    var fileList = Array.prototype.map.call(elem.files, function (file) {
+                        var result = {
+                            id: ++elem._blazorInputFileNextFileId,
+                            lastModified: new Date(file.lastModifiedDate).toISOString(),
+                            name: file.name,
+                            size: file.size,
+                            type: file.type,
+                            relativePath: file.webkitRelativePath
+                        };
+                        elem._blazorFilesById[result.id] = result;
 
-                    // Attach the blob data itself as a non-enumerable property so it doesn't appear in the JSON
-                    Object.defineProperty(result, 'blob', { value: file });
+                        // Attach the blob data itself as a non-enumerable property so it doesn't appear in the JSON
+                        Object.defineProperty(result, 'blob', { value: file });
 
-                    return result;
-                });
+                        return result;
+                    });
 
-                componentInstance.invokeMethodAsync('NotifyChange', fileList).then(function () {
-                    //reset file value ,otherwise, the same filename will not be trigger change event again
-                    elem.value = '';
-                }, function (err) {
-                    //reset file value ,otherwise, the same filename will not be trigger change event again
-                    elem.value = '';
-                    throw new Error(err);
-                });
+                    componentInstance.invokeMethodAsync('NotifyChange', fileList).then(function () {
+                        //reset file value ,otherwise, the same filename will not be trigger change event again
+                        elem.value = '';
+                    }, function (err) {
+                        //reset file value ,otherwise, the same filename will not be trigger change event again
+                        elem.value = '';
+                        throw new Error(err);
+                    });
+                }
             });
         },
 
-        toImageFile(elem, fileId, format, maxWidth, maxHeight) {
+        toImageFile: function toImageFile(elem, fileId, format, maxWidth, maxHeight) {
             var originalFile = getFileById(elem, fileId);
 
             return new Promise(function (resolve) {
