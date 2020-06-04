@@ -2,10 +2,10 @@
     window.BlazorInputFile = {
         init: function init(elem, componentInstance) {
             elem._blazorInputFileNextFileId = 0;
+            elem._blazorFilesById = {};
 
             elem.addEventListener('change', function handleInputFileChange(event) {
-                // Reduce to purely serializable data, plus build an index by ID
-                elem._blazorFilesById = {};
+                // Reduce to purely serializable data, plus build an index by ID                
                 var fileList = Array.prototype.map.call(elem.files, function (file) {
                     var result = {
                         id: ++elem._blazorInputFileNextFileId,
