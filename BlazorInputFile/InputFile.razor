@@ -7,7 +7,7 @@
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> UnmatchedParameters { get; set; }
     [Parameter] public EventCallback<IFileListEntry[]> OnChange { get; set; }
     [Parameter] public int MaxMessageSize { get; set; } = 20 * 1024; // TODO: Use SignalR default
-    [Parameter] public int MaxBufferSize { get; set; } = 1024 * 1024;
+    [Parameter] public int MaxBufferSize { get; set; } = 20 * 1024;
 
     ElementReference inputFileElement;
     IDisposable thisReference;
