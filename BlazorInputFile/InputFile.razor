@@ -40,9 +40,9 @@
             : new RemoteFileListEntryStream(JSRuntime, inputFileElement, file, MaxMessageSize, MaxBufferSize);
     }
 
-    internal async Task<FileListEntryImpl> ConvertToImageFileAsync(FileListEntryImpl file, string format, int maxWidth, int maxHeight)
+    internal async Task<FileListEntryImpl> ConvertToImageFileAsync(FileListEntryImpl file, string format, int maxWidth, int maxHeight, float imgQuality)
     {
-        var imageFile = await JSRuntime.InvokeAsync<FileListEntryImpl>("BlazorInputFile.toImageFile", inputFileElement, file.Id, format, maxWidth, maxHeight);
+        var imageFile = await JSRuntime.InvokeAsync<FileListEntryImpl>("BlazorInputFile.toImageFile", inputFileElement, file.Id, format, maxWidth, maxHeight, imgQuality);
 
         // So that method invocations on the file can be dispatched back here
         imageFile.Owner = (InputFile)(object)this;
