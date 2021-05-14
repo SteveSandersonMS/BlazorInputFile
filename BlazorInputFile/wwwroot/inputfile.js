@@ -34,7 +34,7 @@
             });
         },
 
-        toImageFile(elem, fileId, format, maxWidth, maxHeight) {
+        toImageFile(elem, fileId, format, maxWidth, maxHeight, imgQuality) {
             var originalFile = getFileById(elem, fileId);
 
             return new Promise(function (resolve) {
@@ -51,7 +51,7 @@
                     canvas.width = Math.round(loadedImage.width * chosenSizeRatio);
                     canvas.height = Math.round(loadedImage.height * chosenSizeRatio);
                     canvas.getContext('2d').drawImage(loadedImage, 0, 0, canvas.width, canvas.height);
-                    canvas.toBlob(resolve, format);
+                    canvas.toBlob(resolve, format, imgQuality);
                 });
             }).then(function (resizedImageBlob) {
                 var result = {

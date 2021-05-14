@@ -18,7 +18,7 @@ namespace BlazorInputFile
 
         Stream Data { get; }
 
-        Task<IFileListEntry> ToImageFileAsync(string format, int maxWidth, int maxHeight);
+        Task<IFileListEntry> ToImageFileAsync(string format, int maxWidth, int maxHeight, float imgQuality);
 
         event EventHandler OnDataRead;
     }

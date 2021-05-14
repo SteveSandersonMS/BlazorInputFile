@@ -35,9 +35,9 @@ namespace BlazorInputFile
             }
         }
 
-        public async Task<IFileListEntry> ToImageFileAsync(string format, int maxWidth, int maxHeight)
+        public async Task<IFileListEntry> ToImageFileAsync(string format, int maxWidth, int maxHeight, float imgQuality)
         {
-            return await Owner.ConvertToImageFileAsync(this, format, maxWidth, maxHeight);
+            return await Owner.ConvertToImageFileAsync(this, format, maxWidth, maxHeight, imgQuality);
         }
 
         internal void RaiseOnDataRead()
